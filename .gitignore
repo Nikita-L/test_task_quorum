@@ -7,3 +7,6 @@ qdata
 *.log
 
 *node_modules*
+
+qdata/
+nohup.out

@@ -42,7 +42,7 @@ popd >/dev/null
 wget -q https://github.com/jpmorganchase/quorum/releases/download/v1.2.0/porosity
 mv porosity /usr/local/bin && chmod 0755 /usr/local/bin/porosity
 
-# copy examples
+# copy project
 cp -r /vagrant/test_task /home/vagrant/test_task
 chown -R vagrant:vagrant /home/vagrant/quorum /home/vagrant/test_task
 
