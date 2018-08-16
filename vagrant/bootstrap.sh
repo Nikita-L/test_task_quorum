@@ -43,11 +43,11 @@ wget -q https://github.com/jpmorganchase/quorum/releases/download/v1.2.0/porosit
 mv porosity /usr/local/bin && chmod 0755 /usr/local/bin/porosity
 
 # copy examples
-cp -r /vagrant/examples /home/vagrant/quorum-examples
-chown -R vagrant:vagrant /home/vagrant/quorum /home/vagrant/quorum-examples
+cp -r /vagrant/test_task /home/vagrant/test_task
+chown -R vagrant:vagrant /home/vagrant/quorum /home/vagrant/test_task
 
 # done!
 banner "Quorum"
 echo
-echo 'The Quorum vagrant instance has been provisioned. Examples are available in ~/quorum-examples inside the instance.'
+echo 'The Quorum vagrant instance has been provisioned. Project is available in ~/test_task inside the instance.'
 echo "Use 'vagrant ssh' to open a terminal, 'vagrant suspend' to stop the instance, and 'vagrant destroy' to remove it."
