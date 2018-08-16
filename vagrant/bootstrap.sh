@@ -46,6 +46,11 @@ mv porosity /usr/local/bin && chmod 0755 /usr/local/bin/porosity
 cp -r /vagrant/test_task /home/vagrant/test_task
 chown -R vagrant:vagrant /home/vagrant/quorum /home/vagrant/test_task
 
+# setup Raft-based consensus
+cd test_task
+./raft-init.sh
+./raft-start.sh
+
 # done!
 banner "Quorum"
 echo
