@@ -60,5 +60,4 @@ contract NameValue {
     emit KeyRemoved(key);
   }
 
-  function dump() public view returns
 }
