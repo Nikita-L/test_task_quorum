@@ -12,12 +12,12 @@ qdata/
 nohup.out
 
 .#*
-*/Nnodes/qdata_*
-*/Nnodes/contract_pri.js
-*/Nnodes/contract_pub.js
-*/Nnodes/docker-compose.yml
-*/Nnodes/static-nodes.json
-*/Nnodes/genesis.json
+*/test_task/qdata_*
+*/test_task/contract_pri.js
+*/test_task/contract_pub.js
+*/test_task/docker-compose.yml
+*/test_task/static-nodes.json
+*/test_task/genesis.json
 
 */.idea
 

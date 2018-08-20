@@ -36,7 +36,7 @@ then
     echo "ERROR: There must be more than one node IP address."
     exit 1
 fi
-
+   
 ./cleanup.sh
 
 uid=`id -u`
@@ -69,11 +69,17 @@ do
     qd=qdata_$n
 
     # Generate the node's Enode and key
-    enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode -genkey /qdata/dd/nodekey -writeaddress`
+    enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image sh -c "/usr/local/bin/bootnode -genkey /qdata/dd/nodekey -writeaddress; cat /qdata/dd/nodekey"`
+    enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image sh -c "/usr/local/bin/bootnode -nodekeyhex $enode -writeaddress"`
+#    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode -genkey /qdata/dd/nodekey
+#    enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode --nodekey /qdata/dd/nodekey -writeaddress`
+    #enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode -genkey /qdata/dd/nodekey -writeaddress`
+    echo $enode
 
     # Add the enode to static-nodes.json
     sep=`[[ $n < $nnodes ]] && echo ","`
-    echo '  "enode://'$enode'@'$ip':30303?discport=0"'$sep >> static-nodes.json
+#    echo '  "enode://'$enode'@'$ip':30303?discport=0"'$sep >> static-nodes.json
+    echo '  "enode://'$enode'@'$ip':30303?discport=0&raftport=50400"'$sep >> static-nodes.json
 
     let n++
 done
@@ -156,7 +162,8 @@ do
     cp static-nodes.json $qd/dd/static-nodes.json
 
     # Generate Quorum-related keys (used by Constellation)
-    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/constellation-enclave-keygen /qdata/keys/tm /qdata/keys/tma < /dev/null > /dev/null
+    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/constellation-node --generatekeys=qdata/keys/tm < /dev/null > /dev/null
+#    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/constellation-enclave-keygen /qdata/keys/tm /qdata/keys/tma < /dev/null > /dev/null
     echo 'Node '$n' public key: '`cat $qd/keys/tm.pub`
 
     cp templates/start-node.sh $qd/start-node.sh
@@ -169,8 +176,8 @@ rm -rf genesis.json static-nodes.json
 
 #### Create the docker-compose file ####################################
 
-cat > docker-compose.yml <<EOF
-version: '2'
+cat > ../docker-compose.yml <<EOF
+version: '3'
 services:
 EOF
 
@@ -179,11 +186,11 @@ for ip in ${ips[*]}
 do
     qd=qdata_$n
 
-    cat >> docker-compose.yml <<EOF
+    cat >> ../docker-compose.yml <<EOF
   node_$n:
     image: $image
     volumes:
-      - './$qd:/qdata'
+      - './test_task/$qd:/qdata'
     networks:
       quorum_net:
         ipv4_address: '$ip'
@@ -195,7 +202,21 @@ EOF
     let n++
 done
 
-cat >> docker-compose.yml <<EOF
+cat >> ../docker-compose.yml <<EOF
+
+  python_client:
+    build: ./python_client
+    volumes:
+      - './python_client/src:/src'
+    networks:
+      - quorum_net
+    ports:
+      - 8000:8000
+    depends_on:
+      - node_1
+EOF
+
+cat >> ../docker-compose.yml <<EOF
 
 networks:
   quorum_net:

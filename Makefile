@@ -1,25 +1,25 @@
-raft-network:
-	cd test_task; docker build -t quorum .; cd Nnodes; bash ./setup.sh; docker-compose up -d
+setup:
+	cd test_task; docker build -t quorum .; bash ./setup.sh
+	docker-compose up -d
 	docker ps -s
 
 python-client:
-	cd python_client; docker-compose up -d; docker-compose restart client
+	docker-compose up -d python_client; docker-compose restart python_client
 	docker ps -s
 
 python-client-rebuild:
-	cd python_client; docker-compose up --build -d
+	docker-compose up --build -d python_client
 	docker ps -s
 
 python-client-log:
-	cd python_client; docker-compose logs -f client
+	docker-compose logs -f python_client
 
-python-client-down:
-	cd python_client; docker-compose down
-	docker ps -s
+python-client-bash:
+	docker-compose exec python_client bash
 
 down:
-	cd test_task/Nnodes; docker-compose down; bash ./cleanup.sh
-	cd python_client; docker-compose down
+	docker-compose down
+	cd test_task; bash ./cleanup.sh
 
 containers-statistics:
 	docker ps -s

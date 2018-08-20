@@ -2,11 +2,14 @@ from flask import Flask
 from web3 import Web3
 from solc import compile_source
 from web3.middleware import geth_poa_middleware
+from flask import jsonify, request
 
 
 def w3_init():
-    provider = Web3.HTTPProvider('http://0.0.0.0:22001')
-    return Web3(provider)
+    provider = Web3.HTTPProvider('http://node_1:8545')
+    w3 = Web3(provider)
+    w3.middleware_stack.inject(geth_poa_middleware, layer=0)
+    return w3
 
 
 w3 = w3_init()
@@ -30,7 +33,6 @@ def create_contract():
     contract_interface = compiled_sol['<stdin>:NameValue']
 
     w3.eth.defaultAccount = w3.eth.accounts[0]
-    w3.middleware_stack.inject(geth_poa_middleware, layer=0)
 
     NameValue = w3.eth.contract(
         abi=contract_interface['abi'], bytecode=contract_interface['bin']
@@ -42,9 +44,22 @@ def create_contract():
         abi=contract_interface['abi'],
     )
 
-    tx_hash = name_value.functions.update('test_key', 'test_value').transact()
+    # tx_hash = name_value.functions.update('test_key', 'test_value').transact()
+    # w3.eth.waitForTransactionReceipt(tx_hash)
+    # return name_value.functions.get('test_key').call()
+    return 'ok'
+
+
+@app.route('/update')
+def update():
+    global name_value
+
+    key = request.args.get('key')
+    value = request.args.get('value')
+
+    tx_hash = name_value.functions.update(key, value).transact()
     w3.eth.waitForTransactionReceipt(tx_hash)
-    print(name_value.functions.get('test_key').call())
+    return 'ok'
 
 
 if __name__ == '__main__':

@@ -60,4 +60,12 @@ contract NameValue {
     emit KeyRemoved(key);
   }
 
+  function dumpKeys() public view returns (uint[]){
+    return keys;
+  }
+
+  function getFromUint(uint key_uint) public view returns (string) {
+    return data[key_uint];
+  }
+
 }
