@@ -22,3 +22,5 @@ nohup.out
 */.idea
 
 venv
+
+docker-compose.yml

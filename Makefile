@@ -1,6 +1,7 @@
 setup:
 	cd test_task; docker build -t quorum .; bash ./setup.sh
 	docker-compose up -d
+	docker-compose restart python_client
 	docker ps -s
 
 python-client:
@@ -14,8 +15,11 @@ python-client-rebuild:
 python-client-log:
 	docker-compose logs -f python_client
 
-python-client-bash:
-	docker-compose exec python_client bash
+python-client-python:
+	docker-compose exec python_client python
+
+redis-cli:
+	docker-compose exec redis redis-cli
 
 down:
 	docker-compose down

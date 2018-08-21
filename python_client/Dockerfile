@@ -6,20 +6,11 @@ RUN \
   git clone --depth 1 --recursive -b release https://github.com/ethereum/solidity                           && \
   cd /solidity && cmake -DCMAKE_BUILD_TYPE=Release -DTESTS=0 -DSTATIC_LINKING=1                             && \
   cd /solidity && make solc && install -s  solc/solc /usr/bin
-#  cd / && rm -rf solidity                                                                                   && \
-#  apk del sed build-base git make cmake gcc g++ musl-dev curl-dev boost-dev                                 && \
-#  rm -rf /var/cache/apk/*
-#RUN apt-get install -y software-properties-common
-#RUN add-apt-repository ppa:ethereum/ethereum
-#RUN apt-get update
-#RUN apt-get install -y solc
-#RUN apt-get update && apt-get install -y libssl-dev
 
 ADD ./requirements.txt /
 ADD ./NameValue.sol /
 
 RUN pip install -r /requirements.txt
-#RUN python -m solc.install v0.4.24
 
 ADD ./src/ /src
 

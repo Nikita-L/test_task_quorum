@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.21;
 
 contract NameValue {
   uint[] public keys;
@@ -8,7 +8,7 @@ contract NameValue {
   event KeyRemoved(string key);
 
   function update(string key, string value) public {
-    uint key_uint = stringToUint(key);
+    uint key_uint = stringToUintHash(key);
 
     data[key_uint] = value;
 
@@ -27,25 +27,28 @@ contract NameValue {
     emit KeyUpdated(key, value);
   }
 
-  function stringToUint(string str) private pure returns (uint result) {
-    bytes memory b = bytes(str);
-    uint i;
-    result = 0;
-    for (i = 0; i < b.length; i++) {
-      uint c = uint(b[i]);
-      if (c >= 48 && c <= 57) {
-        result = result * 10 + (c - 48);
-      }
+  function stringToUintHash(string str) private pure returns (uint) {
+    //  function stringToUintHash(string str) public pure returns (uint) {
+    bytes memory tempEmptyStringTest = bytes(str);
+    if (tempEmptyStringTest.length == 0) {
+      return 0;
     }
+
+    bytes32 b;
+    assembly {
+      b := mload(add(str, 32))
+    }
+
+    return uint(b);
   }
 
   function get(string key) public view returns (string) {
-    uint key_uint = stringToUint(key);
+    uint key_uint = stringToUintHash(key);
     return data[key_uint];
   }
 
   function remove(string key) public {
-    uint key_uint = stringToUint(key);
+    uint key_uint = stringToUintHash(key);
 
     delete data[key_uint];
     uint deleteIndex;
@@ -63,9 +66,4 @@ contract NameValue {
   function dumpKeys() public view returns (uint[]){
     return keys;
   }
-
-  function getFromUint(uint key_uint) public view returns (string) {
-    return data[key_uint];
-  }
-
 }

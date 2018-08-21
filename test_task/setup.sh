@@ -107,7 +107,7 @@ do
     # Add the account to the genesis block so it has some Ether at start-up
     sep=`[[ $n < $nnodes ]] && echo ","`
     cat >> genesis.json <<EOF
-    "${account}": {
+    "0x${account}": {
       "balance": "1000000000000000000000000000"
     }${sep}
 EOF
@@ -119,11 +119,17 @@ cat >> genesis.json <<EOF
   },
   "coinbase": "0x0000000000000000000000000000000000000000",
   "config": {
-    "homesteadBlock": 0
+    "byzantiumBlock": 1,
+    "chainId": 10,
+    "eip150Block": 1,
+    "eip155Block": 0,
+    "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "eip158Block": 1,
+    "isQuorum":true
   },
   "difficulty": "0x0",
-  "extraData": "0x",
-  "gasLimit": "0x2FEFD800",
+  "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "gasLimit": "0xE0000000",
   "mixhash": "0x00000000000000000000000000000000000000647572616c65787365646c6578",
   "nonce": "0x0",
   "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -208,12 +214,24 @@ cat >> ../docker-compose.yml <<EOF
     build: ./python_client
     volumes:
       - './python_client/src:/src'
+      - './python_client/NameValue.sol:/NameValue.sol'
     networks:
-      - quorum_net
+      quorum_net:
+        ipv4_address: '172.13.0.255'
     ports:
       - 8000:8000
     depends_on:
       - node_1
+      - redis
+EOF
+
+cat >> ../docker-compose.yml <<EOF
+
+  redis:
+    image: redis
+    networks:
+      quorum_net:
+        ipv4_address: '172.13.0.254'
 EOF
 
 cat >> ../docker-compose.yml <<EOF
