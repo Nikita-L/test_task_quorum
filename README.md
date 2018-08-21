@@ -14,4 +14,4 @@
 - update key value: `http://0.0.0.0:8000/update?key=somekey&value=somevalue`  
 - get value: `http://0.0.0.0:8000/get?key=somekey`  
 - remove key value: `http://0.0.0.0:8000/remove?key=somekey`  
-- dump all data: `http://0.0.0.0:8000/dump?file=filename`  
+- dump all data in csv: `http://0.0.0.0:8000/dump?file=filename`  
