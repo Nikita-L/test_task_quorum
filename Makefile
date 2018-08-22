@@ -21,7 +21,14 @@ python-client-python:
 redis-cli:
 	docker-compose exec redis redis-cli
 
+add-node:
+	cd test_task; bash ./add_peer.sh
+
+node_1-geth:
+	docker-compose exec node_1 geth attach qdata/dd/geth.ipc
+
 down:
+	docker stop test_task_quorum_node_4_1 || true && docker rm test_task_quorum_node_4_1 || true
 	docker-compose down
 	cd test_task; bash ./cleanup.sh
 

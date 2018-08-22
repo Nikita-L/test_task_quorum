@@ -15,9 +15,6 @@
 # Geth and Constellation logfiles for Node N will be in qdata_N/logs/
 #
 
-# TODO: check file access permissions, especially for keys.
-
-
 #### Configuration options #############################################
 
 # One Docker container will be configured for each IP address in $ips
@@ -71,14 +68,10 @@ do
     # Generate the node's Enode and key
     enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image sh -c "/usr/local/bin/bootnode -genkey /qdata/dd/nodekey -writeaddress; cat /qdata/dd/nodekey"`
     enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image sh -c "/usr/local/bin/bootnode -nodekeyhex $enode -writeaddress"`
-#    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode -genkey /qdata/dd/nodekey
-#    enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode --nodekey /qdata/dd/nodekey -writeaddress`
-    #enode=`docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/bootnode -genkey /qdata/dd/nodekey -writeaddress`
     echo $enode
 
     # Add the enode to static-nodes.json
     sep=`[[ $n < $nnodes ]] && echo ","`
-#    echo '  "enode://'$enode'@'$ip':30303?discport=0"'$sep >> static-nodes.json
     echo '  "enode://'$enode'@'$ip':30303?discport=0&raftport=50400"'$sep >> static-nodes.json
 
     let n++
@@ -169,7 +162,6 @@ do
 
     # Generate Quorum-related keys (used by Constellation)
     docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/constellation-node --generatekeys=qdata/keys/tm < /dev/null > /dev/null
-#    docker run -u $uid:$gid -v $pwd/$qd:/qdata $image /usr/local/bin/constellation-enclave-keygen /qdata/keys/tm /qdata/keys/tma < /dev/null > /dev/null
     echo 'Node '$n' public key: '`cat $qd/keys/tm.pub`
 
     cp templates/start-node.sh $qd/start-node.sh
