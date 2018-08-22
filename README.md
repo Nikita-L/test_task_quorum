@@ -18,7 +18,7 @@
 
 ## Add node  
 
-1. Run: `make add-node`. On execution you will see enode string and ask to enter raft id. Copy raft id  
+1. Run: `make add-node`. On execution you will see enode string and ask to enter raft id. Copy enode string  
 2. Open new terminal, run: `make node_1-geth`. Type: `var e = "` and paste copied enode string, type `";`. Press *Enter*. Provide `raft.addPeer(e);` and press *Enter*. There you will see number that represent your raft id, copy it  
 3. Open previous terminal and paste copied raft id  
 
