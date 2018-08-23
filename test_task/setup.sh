@@ -206,7 +206,8 @@ cat >> ../docker-compose.yml <<EOF
     build: ./python_client
     volumes:
       - './python_client/src:/src'
-      - './python_client/NameValue.sol:/NameValue.sol'
+      - './python_client/NameValue1.sol:/NameValue1.sol'
+      - './python_client/NameValue2.sol:/NameValue2.sol'
     networks:
       quorum_net:
         ipv4_address: '172.13.0.255'

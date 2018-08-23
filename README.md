@@ -6,7 +6,7 @@
 2. Clone the repo: `git clone https://github.com/Nikita-L/test_task_quorum.git`  
 3. `cd test_task_quorum`  
 4. Build raft-consensus network: `make setup`  
-5. Create contract `curl http://0.0.0.0:8000/create_contract`
+5. Create first contract version `curl http://0.0.0.0:8000/create_contract?version=1`
 6. To shutdown run: `make down`  
 
 ## Usage examples  
@@ -25,3 +25,17 @@
 To check that peer is added, run: `make node_1-geth`, type `admin.peers`, press *Enter*. If you will see 3 items in the list, one of which will have *remoteAddress: "172.13.0.5:__port__"*, that is the sign that peer is added.  
 
 To understand the logic of raft consensus work, see scenarios when new nodes are added or some nodes removed, review interactive raft consensus description: [link](http://thesecretlivesofdata.com/raft/)
+
+## NameValue contract version 2  
+
+Create second contract version `curl http://0.0.0.0:8000/create_contract?version=2`
+
+### Usage examples  
+- update key value: `http://0.0.0.0:8000/update?version=2&key=somekey&value=somevalue&author=someauthor`  
+- get value: `http://0.0.0.0:8000/get?version=2&key=somekey`  
+- remove key value: `http://0.0.0.0:8000/remove?version=2&key=somekey`  
+- dump all data in csv: `http://0.0.0.0:8000/dump?version=2&file=filename`  
+- get history of specific key: `http://0.0.0.0:8000/get_history?version=2&key=somekey`  
+- listener for all events (key update and key remove): `http://0.0.0.0:8000/listener?version=2`  
+
+To check listener, open mentioned above link in browser, then update or remove keys for NameValue2 contract.

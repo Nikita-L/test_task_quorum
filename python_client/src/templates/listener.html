@@ -1,0 +1,11 @@
+<!doctype html>
+<title>listener</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<div id="data"></div>
+{% for d in data: %}
+    {% if d %}
+<script>
+  $("#data").append("{{ d }}<br>")
+</script>
+    {% endif %}
+{% endfor %}

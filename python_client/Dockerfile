@@ -8,7 +8,8 @@ RUN \
   cd /solidity && make solc && install -s  solc/solc /usr/bin
 
 ADD ./requirements.txt /
-ADD ./NameValue.sol /
+ADD NameValue1.sol /
+ADD NameValue2.sol /
 
 RUN pip install -r /requirements.txt
 
