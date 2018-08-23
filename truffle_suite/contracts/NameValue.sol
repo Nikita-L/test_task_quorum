@@ -28,7 +28,6 @@ contract NameValue {
   }
 
   function stringToUintHash(string str) private pure returns (uint) {
-    //  function stringToUintHash(string str) public pure returns (uint) {
     bytes memory tempEmptyStringTest = bytes(str);
     if (tempEmptyStringTest.length == 0) {
       return 0;
@@ -58,7 +57,11 @@ contract NameValue {
         break;
       }
     }
-    delete keys[deleteIndex];
+
+    for (i = deleteIndex; i<keys.length-1; i++){
+      keys[i] = keys[i+1];
+    }
+    keys.length--;
 
     emit KeyRemoved(key);
   }

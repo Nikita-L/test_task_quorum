@@ -28,7 +28,6 @@ contract NameValue {
   }
 
   function stringToUintHash(string str) private pure returns (uint) {
-//  function stringToUintHash(string str) public pure returns (uint) {
     bytes memory tempEmptyStringTest = bytes(str);
     if (tempEmptyStringTest.length == 0) {
       return 0;
