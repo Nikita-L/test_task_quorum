@@ -24,7 +24,7 @@
 
 To check that peer is added, run: `make node_1-geth`, type `admin.peers`, press *Enter*. If you will see 3 items in the list, one of which will have *remoteAddress: "172.13.0.5:__port__"*, that is the sign that peer is added.  
 
-To understand the logic of raft consensus work, see scenarios when new nodes are added or some nodes removed, review interactive raft consensus description: [link](http://thesecretlivesofdata.com/raft/)
+To understand the logic of raft consensus work, see scenarios when new nodes are added or some nodes removed / down, review interactive raft consensus description: [link](http://thesecretlivesofdata.com/raft/)
 
 ## NameValue contract version 2  
 
